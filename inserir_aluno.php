@@ -9,12 +9,13 @@ $pdo = new PDO("sqlite:" . $databasePath);
 
 $student = new Student(
     null,
-    "Marcelo Holanda', ''); DROP TABLE students;",
-    new \DateTimeImmutable('1967-11-24')
+    "Patricia Robin",
+    new \DateTimeImmutable('1997-01-24')
 );
 
 $sqlInsert = "INSERT INTO students(name,birth_date) VALUES(:nome, :data_nasc);";
 
+// Com prepared statements evitamos problemas com SQL Injections 
 $statement = $pdo->prepare($sqlInsert);
 $statement->bindValue(":nome", $student->name());
 $statement->bindValue(":data_nasc", $student->birthDate()->format('Y-m-d'));
