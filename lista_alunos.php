@@ -1,11 +1,11 @@
 <?php
 
 use Alura\Pdo\Domain\Model\Student;
+use Alura \Pdo\Infrastructure\Persistance\ConnectionCreator;
 
 require_once 'vendor/autoload.php';
 
-$databasePath = __DIR__ . "/banco.sqlite";
-$pdo = new PDO("sqlite:" . $databasePath);
+$pdo = ConnectionCreator::createConnection();
 
 $statement = $pdo->query('SELECT * FROM students; ');
 // quando queremos buscar uma linha, podemos utilizar com fetch ao inves de fetchAll
