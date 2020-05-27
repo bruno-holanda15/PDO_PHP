@@ -5,6 +5,8 @@
         }
     },
     "require": {
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "phan/phan": "^3.0",
+        "squizlabs/php_codesniffer": "^3.5"
     }
 }
