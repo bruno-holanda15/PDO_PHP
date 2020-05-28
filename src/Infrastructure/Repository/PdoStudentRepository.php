@@ -8,11 +8,12 @@ use Alura \Pdo\Infrastructure\Persistance\ConnectionCreator;
 
 class PdoStudentRepository implements StudentRepository
 {
-    private $connection;
+    private PDO $connection;
 
-    public function __construct()
+    //injeção de dependência 
+    public function __construct(PDO $connection)
     {
-        $this->connection = ConnectionCreator::createConnection();
+        $this->connection = $connection;
     }
 
     public function allStudents(): array
@@ -33,6 +34,8 @@ class PdoStudentRepository implements StudentRepository
             return $this->hydrateStudentList($statement);
         }
     }
+
+    // hidratar , padrão que transfere dado de uma camada para outra, podemos ver que estamos recebendo dados da camada do banco de dados , pelo metodo fetchALl, e passando para a camada da regra de négocio desenvolvida 
 
     public function hydrateStudentList(\PDOStatement $statement ): array
     {
