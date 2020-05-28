@@ -18,7 +18,8 @@ class PdoStudentRepository implements StudentRepository
     public function allStudents(): array
     {
         $statement = $this->connection->query('SELECT * FROM students;');
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        // return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $this->hydrateStudentList($statement);
     }
 
     public function birthDateAt(\DateTimeInterface $birthDate): array
@@ -28,8 +29,25 @@ class PdoStudentRepository implements StudentRepository
         $statement->bindValue(':birth_date',$birthDate);
 
         if($statement->execute()){
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
+            // return $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $this->hydrateStudentList($statement);
         }
+    }
+
+    public function hydrateStudentList(\PDOStatement $statement ): array
+    {
+        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $studentList = [];
+        
+        foreach ($studentDataList as $student ) {
+            $studentList[] = new Student(
+                $student['id'],
+                $student['name'],
+                new \DateTimeImmutable($student['birth_date'])
+            );
+        }       
+
+        return $studentList;
     }
 
     public function saveStudent(Student $student): bool
@@ -42,7 +60,8 @@ class PdoStudentRepository implements StudentRepository
         
     }
 
-    public function insert(Student $student){
+    public function insert(Student $student): bool
+    {
 
         $sqlInsert = "INSERT INTO students(name,birth_date) VALUES(:nome, :data_nasc);";
         $statement = $this->connection->prepare($sqlInsert);
@@ -55,7 +74,8 @@ class PdoStudentRepository implements StudentRepository
         return $success;
     }
 
-    public function update(){
+    public function update(): bool
+    {
 
         $sqlUpdate = "UPDATE students SET name = :name, birth_date = :data_nasc WHERE id = :id;";
         $statement = $this->connection->prepare($sqlUpdate);
