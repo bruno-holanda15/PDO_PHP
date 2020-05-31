@@ -8,20 +8,29 @@ require_once 'vendor/autoload.php';
 
 $connection = ConnectionCreator::createConnection();
 $repository = new PdoStudentRepository($connection);
+
 $connection->beginTransaction();
 
-$aStudent = new Student(
-    null,
-    'Thiago Iorc',
-    new \DateTimeImmutable('1998-02-03')
-);
-$repository->saveStudent($aStudent);
+try {
+    $aStudent = new Student(
+        null,
+        'Marcus Buchecha',
+        new \DateTimeImmutable('1998-02-03')
+    );
+    $repository->saveStudent($aStudent);
+    
+    // $anotherStudent = new Student(
+    //     null,
+    //     'Kelly Slater',
+    //     new \DateTimeImmutable('1983-12-23')
+    // );
+    // $repository->saveStudent($anotherStudent);
+    
+    $connection->commit();
+    
+} catch (\PDOException $e) {
+    echo $e->getMessage();
 
-$anotherStudent = new Student(
-    null,
-    'Kelly Slater',
-    new \DateTimeImmutable('1983-12-23')
-);
-$repository->saveStudent($anotherStudent);
-
-$connection->commit();
+    // comando rollBack cancela as transação anterior, voltando ao último 'checkpoint'
+    $connection->rollBack();
+}

@@ -69,6 +69,7 @@ class PdoStudentRepository implements StudentRepository
 
         $sqlInsert = "INSERT INTO students(name,birth_date) VALUES(:nome, :data_nasc);";
         $statement = $this->connection->prepare($sqlInsert);
+ 
         $statement->bindValue(":nome", $student->name());
         $statement->bindValue(":data_nasc", $student->birthDate()->format('Y-m-d'));
         $success = $statement->execute();
