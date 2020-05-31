@@ -40,7 +40,8 @@ class PdoStudentRepository implements StudentRepository
 
     public function hydrateStudentList(\PDOStatement $statement ): array
     {
-        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $statement->fetchAll();
+        // não é necessário passar PDO::FETCH_ASSOC pq já setei esse atributo na hora de criar a conexão , ConnectionCreator
         $studentList = [];
         
         foreach ($studentDataList as $student ) {
