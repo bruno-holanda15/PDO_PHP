@@ -7,6 +7,10 @@ $pdo = new PDO("sqlite:" . $databasePath);
 
 echo "Conectei" . PHP_EOL;
 
+// $insert = "INSERT INTO phones(area_code, number, student_id) VALUES('11','9999999',1) ,('21','24242424',1), ('61','707070707',3)  ";
+// $pdo->exec($insert);
+// exit();
+
 $createSql = ' CREATE TABLE IF NOT exists students (
                     id INTEGER PRIMARY KEY,
                     name TEXT,

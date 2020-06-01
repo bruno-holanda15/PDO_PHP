@@ -2,10 +2,17 @@
 
 use Alura\Pdo\Domain\Model\Student;
 use Alura \Pdo\Infrastructure\Persistance\ConnectionCreator;
+use Alura\Pdo\Infrastructure\Repository\PdoStudentRepository;
 
 require_once 'vendor/autoload.php';
 
 $pdo = ConnectionCreator::createConnection();
+$repository = new PdoStudentRepository($pdo);
+$studentList = $repository->allStudents();
+
+var_dump($studentList);
+exit();
+
 
 $statement = $pdo->query('SELECT * FROM students; ');
 // quando queremos buscar uma linha, podemos utilizar com fetch ao inves de fetchAll
