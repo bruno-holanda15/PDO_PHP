@@ -6,7 +6,7 @@ use Alura\Pdo\Repository\StudentRepository;
 use Alura\Pdo\Domain\Model\Student;
 use Alura\Pdo\Domain\Model\Phone;
 use PDO;
-use Alura \Pdo\Infrastructure\Persistance\ConnectionCreator;
+use Alura\Pdo\Infrastructure\Persistance\ConnectionCreator;
 
 class PdoStudentRepository implements StudentRepository
 {
@@ -56,7 +56,6 @@ class PdoStudentRepository implements StudentRepository
 
             $studentList[] = $student;
         }    
-        
 
         return $studentList;
     }
@@ -79,6 +78,39 @@ class PdoStudentRepository implements StudentRepository
 
             $student->addPhone($phone);
         }
+
+    }
+
+    public function studentsWithPhones(): array
+    {
+        $sqlSearch = "SELECT students.id,
+                             students.name,
+                             students.birth_date,
+                             phones.id AS phone_id,
+                             phones.area_code,
+                             phones.number
+                        FROM students 
+                        JOIN phones ON students.id = phones.student_id; ";
+
+        $statement = $this->connection->query($sqlSearch);
+        $result = $statement->fetchAll();
+        $studentList = [];
+
+        foreach ($result as $row ) {
+            if(!array_key_exists($row["id"], $studentList)) {
+                $studentList[$row["id"]] = new Student(
+                    $row["id"],
+                    $row["name"],
+                    new \DateTimeImmutable( $row["birth_date"])
+
+                );
+            }
+
+            $phone = new Phone( $row["phone_id"], $row["area_code"], $row["number"]);
+            $studentList[$row["id"]]->addPhone($phone);
+        }
+
+        return $studentList;
 
     }
 

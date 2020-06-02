@@ -4,6 +4,7 @@ namespace Alura\Pdo\Domain\Model;
 
 class Student
 {
+     /** @var int|null */
     private ?int $id;
     private string $name;
     private \DateTimeInterface $birthDate;
@@ -56,7 +57,7 @@ class Student
     {
         $this->phones[] = $phone;
     }
-    
+
     /** @return Phone[]  */
     public function phones(): array
     {
